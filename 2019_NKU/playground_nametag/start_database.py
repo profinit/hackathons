@@ -56,7 +56,10 @@ conn = psycopg2.connect("dbname='dbname' user='user' host='localhost' password='
 print('Connected')
 cur = conn.cursor()
 
-select_rows_stm = 'SELECT record_id, subject FROM {table}'.format(table=table)
+select_rows_stm = '''SELECT t1.record_id, t1.subject
+FROM {table} t1
+LEFT OUTER JOIN {table}_name_tag t2 ON t1.record_id = t2.record_id
+WHERE t2.record_id IS NULL'''.format(table=table)
 cur.execute(select_rows_stm)
 rows = cur.fetchall()
 
