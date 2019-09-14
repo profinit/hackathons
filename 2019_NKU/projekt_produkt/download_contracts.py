@@ -36,9 +36,10 @@ with conn.cursor() as cur:
                             'payer': item['Platce']['ico'],
                             'supplier': item['Prijemce'][0]['ico'],
                             'description': item['predmet'],
-                            'amount': item['CalculatedPriceWithVATinCZK']}
-                insert_stm = '''INSERT INTO {table}_contracts (record_id, sign_date, payer, supplier, description, amount) 
-                VALUES (%s, %s, %s, %s, %s, %s)'''.format(table=table)
+                            'amount': item['CalculatedPriceWithVATinCZK'],
+                            'link': 'https://www.hlidacstatu.cz/Detail/{}'.format(item['identifikator']['idVerze'])}
+                insert_stm = '''INSERT INTO {table}_contracts (record_id, sign_date, payer, supplier, description, amount, link) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s)'''.format(table=table)
                 cur.execute(insert_stm, list(contract.values()))
             update_stm = '''UPDATE {table}_product_list SET downloaded=True WHERE record_id=%s'''.format(table=table)
             cur.execute(update_stm, [row_id])
